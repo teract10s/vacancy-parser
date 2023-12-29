@@ -36,7 +36,7 @@ functions:
 
 If you want locally run this project follow these steps:
 
-- Clone the repository from GitHub: `git clone https://github.com/teract10s/bookStore.git`
+- Clone the repository from GitHub: `git clone https://github.com/teract10s/vacancy-parser.git`
 - Create a .env file and fill it with the necessary variables (an example of all the necessary variables in the
   .env.sample file)
 - Run project
