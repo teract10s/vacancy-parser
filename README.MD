@@ -18,6 +18,7 @@ functions:
 * Java 17
 * Spring v3.1.4 (Boot, Web, JPA, Security)
 * Hibernate
+* Swagger
 * Mysql v8.0.33
 * Mapstruct
 * Jsoup v1.15.3
@@ -38,7 +39,6 @@ If you want locally run this project follow these steps:
 - Clone the repository from GitHub: `git clone https://github.com/teract10s/bookStore.git`
 - Create a .env file and fill it with the necessary variables (an example of all the necessary variables in the
   .env.sample file)
-- Run `mvn clean package` command
 - Run project
 - The project will be launched at the following link: http://localhost:8080
 - Also you can use swagger for testing at the following link: http://localhost:8080/swagger-ui/index.html#
