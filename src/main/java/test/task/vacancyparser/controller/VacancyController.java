@@ -5,16 +5,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import test.task.vacancyparser.techstarsjobs.TechstarsJobsScraper;
-import test.task.vacancyparser.dto.ResponseVacancyDto;
+import test.task.vacancyparser.service.JobService;
+import test.task.vacancyparser.dto.VacancyDto;
 
 @RestController
 @RequiredArgsConstructor
 public class VacancyController {
-    private final TechstarsJobsScraper techstarsJobsScraper;
+    private final JobService jobService;
 
     @GetMapping("/api/vacancies")
-    public List<ResponseVacancyDto> getVacancyByFunction(@RequestParam String jobFunction) {
-        return techstarsJobsScraper.retrieveVacanciesByFunction(jobFunction);
+    public List<VacancyDto> getVacancyByFunction(@RequestParam String jobFunction) {
+        return jobService.getVacanciesByFunction(jobFunction);
     }
 }

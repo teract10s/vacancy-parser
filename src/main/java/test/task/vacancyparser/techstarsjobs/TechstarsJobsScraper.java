@@ -1,6 +1,9 @@
 package test.task.vacancyparser.techstarsjobs;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -8,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import test.task.vacancyparser.dto.JobItem;
-import test.task.vacancyparser.dto.ResponseVacancyDto;
+import test.task.vacancyparser.dto.VacancyDto;
 import test.task.vacancyparser.exception.UrlConnectionException;
 import test.task.vacancyparser.util.Base64Encoder;
 
@@ -25,14 +28,14 @@ public class TechstarsJobsScraper {
     @Value("${tag.class}")
     private String tagClass;
 
-    public List<ResponseVacancyDto> retrieveVacanciesByFunction(String jobFunction) {
+    public List<VacancyDto> retrieveVacanciesByFunction(String jobFunction) {
         String url = buildUrlByFunction(jobFunction);
         List<Element> vacanciesContent = fetchVacanciesContent(url);
         return parseHtmlVacancies(vacanciesContent);
     }
 
-    private List<ResponseVacancyDto> parseHtmlVacancies(List<Element> vacanciesContent) {
-        return vacanciesContent.stream()
+    private List<VacancyDto> parseHtmlVacancies(List<Element> vacanciesContent) {
+       return vacanciesContent.parallelStream()
                 .filter(v -> v.select(vacancyUrlClass).attr("href").startsWith("/"))
                 .map(v -> {
                     List<String> tags = v.select(tagClass).stream()
@@ -40,7 +43,7 @@ public class TechstarsJobsScraper {
                             .toList();
                     String url = v.select(vacancyUrlClass).attr("href");
                     JobItem jobItem = jobVacancyScraper.retrieveJobItemByVacancyUrl(BASE_URL + url);
-                    return new ResponseVacancyDto(jobItem, tags);
+                    return new VacancyDto(jobItem, tags);
                 })
                 .toList();
     }

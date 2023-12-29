@@ -1,6 +1,6 @@
 package test.task.vacancyparser.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public record JobItem(
         String url,
@@ -9,8 +9,8 @@ public record JobItem(
         String logo,
         String organizationTitle,
         String laborFunction,
-        String address,
-        Date pastedDate,
+        String location,
+        LocalDate postedDate,
         String description
 ) {
 }

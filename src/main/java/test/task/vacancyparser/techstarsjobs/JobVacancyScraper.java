@@ -1,9 +1,9 @@
 package test.task.vacancyparser.techstarsjobs;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,6 +14,7 @@ import test.task.vacancyparser.exception.UrlConnectionException;
 
 @Component
 public class JobVacancyScraper {
+    private static final String DATE_FORMAT = "'Posted on' EEEE, MMMM dd, yyyy";
     @Value("${position.class}")
     private String positionClass;
     @Value("${organization.url.class}")
@@ -33,36 +34,36 @@ public class JobVacancyScraper {
 
     public JobItem retrieveJobItemByVacancyUrl(String url) {
         Document fetchedVacancy = fetchDocumentByUrl(url);
-        return getJobItemByDocument(url, fetchedVacancy);
+        return getJobItemByFetchedVacancy(url, fetchedVacancy);
     }
 
-    private JobItem getJobItemByDocument(String url, Document fetchedVacancy) {
-        String positionName = fetchedVacancy.select(positionClass).text();
-        String organizationUrl = fetchedVacancy.select(organizationUrlClass).attr("href");
-        String logo = fetchedVacancy.select(organizationLogoClass).attr("src");
-        String organizationTitle = fetchedVacancy.select(organizationTitleClass).text();
-        String laborFunction = fetchedVacancy.select(laborFunctionClass).stream()
+    private JobItem getJobItemByFetchedVacancy(String url, Document vacancy) {
+        String positionName = vacancy.select(positionClass).text();
+        String organizationUrl = vacancy.select(organizationUrlClass).attr("href");
+        String logo = vacancy.select(organizationLogoClass).attr("src");
+        String organizationTitle = vacancy.select(organizationTitleClass).text();
+        String laborFunction = vacancy.select(laborFunctionClass).stream()
                 .skip(4)
                 .findFirst()
                 .get()
                 .text();
-        String address = fetchedVacancy.select(addressClass).stream()
+        String address = vacancy.select(addressClass).stream()
                 .skip(5)
                 .findFirst()
                 .get()
                 .text();
-        Date date = parsePostedDate(fetchedVacancy.select(postedDateClass).text());
-        String description = fetchedVacancy.select(descriptionClass).html();
+        LocalDate date = parsePostedDate(vacancy.select(postedDateClass).text());
+        String description = vacancy.select(descriptionClass).html();
         return new JobItem(url, positionName, organizationUrl,
                 logo, organizationTitle, laborFunction,
                 address, date, description);
     }
 
-    private Date parsePostedDate(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("'Posted on' EEEE, MMMM dd, yyyy", Locale.ENGLISH);
+    private LocalDate parsePostedDate(String dateString) {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DATE_FORMAT, Locale.ENGLISH);
         try {
-            return dateFormat.parse(dateString);
-        } catch (ParseException e) {
+            return LocalDate.parse(dateString, dateFormat);
+        } catch (DateTimeParseException e) {
             throw new RuntimeException("Can't parse: " + dateString + " to date");
         }
     }
