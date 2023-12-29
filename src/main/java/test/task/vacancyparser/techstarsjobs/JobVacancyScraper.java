@@ -41,7 +41,11 @@ public class JobVacancyScraper {
         String positionName = vacancy.select(positionClass).text();
         String organizationUrl = vacancy.select(organizationUrlClass).attr("href");
         String logo = vacancy.select(organizationLogoClass).attr("src");
-        String organizationTitle = vacancy.select(organizationTitleClass).text();
+        String organizationTitle = vacancy.select(organizationTitleClass).stream()
+                .skip(3)
+                .findFirst()
+                .get()
+                .text();
         String laborFunction = vacancy.select(laborFunctionClass).stream()
                 .skip(4)
                 .findFirst()

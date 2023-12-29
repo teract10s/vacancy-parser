@@ -11,7 +11,7 @@ import test.task.vacancyparser.model.Job;
 @Component
 public class CsvWriter {
     public static void writeJobsToCsv(List<Job> jobs, String filePath) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter(new File(filePath)))) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(filePath))) {
             writer.writeNext(new String[]{"id", "jobUrl", "positionName", "organizationUrl", "logo",
                     "organizationTitle", "laborFunction", "location", "postedDate", "tags", "description"});
 

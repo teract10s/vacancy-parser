@@ -1,16 +1,19 @@
 package test.task.vacancyparser.dto;
 
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-public record JobItem(
-        String url,
-        String positionName,
-        String organizationUrl,
-        String logo,
-        String organizationTitle,
-        String laborFunction,
-        String location,
-        LocalDate postedDate,
-        String description
-) {
+@Data
+@AllArgsConstructor
+public class JobItem {
+    private String url;
+    private String positionName;
+    private String organizationUrl;
+    private String logo;
+    private String organizationTitle;
+    private String laborFunction;
+    private String location;
+    private LocalDate postedDate;
+    private String description;
 }

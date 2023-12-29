@@ -1,9 +1,6 @@
 package test.task.vacancyparser.techstarsjobs;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
